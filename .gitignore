@@ -1,9 +1,21 @@
+
+# Ignorar a pasta de build do Maven
 /target/
 
+# Ignorar arquivos de configuração sensíveis
+src/main/resources/application.properties
+
+# Ignorar arquivos de log
+*.log
+
+# Ignorar arquivos temporários do sistema
+*.class
+*.swp
 *.swo
 *.DS_Store
 
-# Ignorar IDEs (opcional)
+# Ignorar configurações de IDEs
+
 # IntelliJ
 .idea/
 *.iml
