@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -13,23 +14,26 @@ import org.springframework.stereotype.Service;
 
 import com.example.whatsapp.model.Contato;
 import com.example.whatsapp.model.Mensagem;
+import com.example.whatsapp.model.Potencial;
 import com.example.whatsapp.repository.ContatoRepository;
 import com.example.whatsapp.repository.MensagemRepository;
+import com.example.whatsapp.repository.PotencialRepository;
 
 @Service
 public class MensagemService {
 
 	private final ContatoRepository contatoRepo;
 	private final MensagemRepository mensagemRepo;
-	
+	private final PotencialRepository potencialRepo;
 
 	private final String WHATSAPP_API_URL = "https://graph.facebook.com/v17.0/";
     private final String TOKEN = "TOKEN_DEFINITIVO";
 
 
-	public MensagemService(ContatoRepository contatoRepo, MensagemRepository mensagemRepo) {
+	public MensagemService(ContatoRepository contatoRepo, MensagemRepository mensagemRepo, PotencialRepository potencialRepo) {
 		this.contatoRepo = contatoRepo;
 		this.mensagemRepo = mensagemRepo;
+		this.potencialRepo = potencialRepo;
 	}
 
 	public void processarWebhook(Map<String, Object> payload) {
@@ -97,6 +101,13 @@ public class MensagemService {
 
 
 							mensagemRepo.save(mensagem);
+							
+							//Cliente em potencial
+							Potencial potencial = new Potencial();
+							potencial.setContato(contato);
+							potencial.setMensagem(mensagem);
+							potencial.setDataResposta(LocalDateTime.now());
+							potencialRepo.save(potencial);
 						}
 					}
 				} else {

@@ -7,17 +7,15 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.Files;
-
 import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -133,6 +131,26 @@ public class MensagensController {
 
 		return ResponseEntity.ok(listarContatosDto);
 	}
+	
+	@Operation(summary = "Lista de todos os contatos com potencial que responderam")
+	@GetMapping("/com-potencial")
+	public ResponseEntity<List<ContatoDTO>> listarContatosComPotencial() {
+		
+		List<ContatoDTO> listarContatosDto = new ArrayList<ContatoDTO>();
+		
+		List<Contato> listarContatos = contatoRepo.findContatosComPotencialOrdenadosPorDataResposta();
+
+		for (Contato cts : listarContatos) {
+			ContatoDTO contatoDto = new ContatoDTO();
+			contatoDto.setNome(cts.getNome());
+			contatoDto.setNumero(cts.getWaId());
+			listarContatosDto.add(contatoDto);
+		}
+
+		return ResponseEntity.ok(listarContatosDto);
+	}
+	
+	
 
 	// 🔹 GET /mensagens/contato/{numero}
 	@Operation(summary = "Lista mensagens de um contato")

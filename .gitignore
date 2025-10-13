@@ -1,0 +1,17 @@
+/target/
+
+*.swo
+*.DS_Store
+
+# Ignorar IDEs (opcional)
+# IntelliJ
+.idea/
+*.iml
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
